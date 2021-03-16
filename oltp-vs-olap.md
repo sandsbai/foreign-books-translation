@@ -18,4 +18,4 @@ data modeling can significantly improve matters by actively involving business
 stakeholders in the analysis and design process. We finish by introducing BEAM
 (Business Event Analysis and Modeling): the set of agile techniques for collaborative dimensional modeling described throughout this book.      
 
-对于熟悉传统纬度建模好处的读者，可以跳过本章节，直接阅读[下一节 数仓需求分析和设计](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)。在该章节中我们将会介绍敏捷纬度建模，通过回顾DW/BI的开发流程和审视传统数据需求分析方法，我们强调了传统方法在处理复杂数据源和应对快节奏数仓开发项目时的缺点。而为了解决这种问题，我们积极地让业务利益相关者参与到需求分析和设计过程。在本章的最后，我们将介绍一套利于跨部门协同的纬度建模的敏捷工具 - BEAM（Business Event Analysis and Modeling），该工具带有**协同**、**增量**和**迭代**的重要特性。
+对于熟悉传统纬度建模好处的读者，可以跳过本章节，直接阅读下一节[数仓需求分析和设计](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)。在该章节中我们将会介绍敏捷纬度建模，通过回顾DW/BI的开发流程和审视传统数据需求分析方法，我们强调了传统方法在处理复杂数据源和应对快节奏数仓开发项目时的缺点。而为了解决这种问题，我们积极地让业务利益相关者参与到需求分析和设计过程。在本章的最后，我们将介绍一套利于跨部门协同的纬度建模的敏捷工具 - BEAM（Business Event Analysis and Modeling），该工具带有**协同**、**增量**和**迭代**的重要特性。
