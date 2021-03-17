@@ -1,21 +1,32 @@
 # 第一节 OLTP Vs DW/BI 两个不同的世界
->In this first chapter we set out the motivation for adopting an agile approach to 
-data warehouse design. We start by summarizing the fundamental differences 
-between data warehouses and online transaction processing (OLTP) databases to 
-show why they need to be designed using very different data modeling techniques. 
-We then contrast entity-relationship and dimensional modeling and explain why
-dimensional models are optimal for data warehousing/business intelligence
-(DW/BI). While doing so we also describe how dimensional modeling enables 
-incremental design and delivery: key principles of agile software development.   
-
 在本章节中，我们旨在说明将敏捷方法运用于数仓设计领域的动机。我们将在文章的开头总结DW/BI系统和业务系统（OLTP）之间的基础性差异，在此基础上进一步解释这两者使用不同数据建模技巧的原因。接着我们会对比ER（Entity-relationship）建模和纬度建模，并解释为什么纬度建模更适合DW/BI系统。与此同时，我们会介绍纬度建模是如何支持增量设计和交付的，毕竟**增量**是敏捷软件开发的核心原则。   
 
->Readers who are familiar with the benefits of traditional dimensional modeling 
-may wish to skip to Data Warehouse Analysis and Design on Page 11 where we begin 
-the case for agile dimensional modeling. There, we take a step back in the DW/BI
-development lifecycle and examine the traditional approaches to data requirements analysis, and highlight their shortcomings in dealing with ever more complex data sources and aggressive BI delivery schedules. We then describe how agile
-data modeling can significantly improve matters by actively involving business 
-stakeholders in the analysis and design process. We finish by introducing BEAM
-(Business Event Analysis and Modeling): the set of agile techniques for collaborative dimensional modeling described throughout this book.      
-
 对于熟悉传统纬度建模好处的读者，可以跳过本章节，直接阅读下一节[数仓需求分析和设计](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)。在该章节中我们将会介绍敏捷纬度建模，通过回顾DW/BI的开发流程和审视传统数据需求分析方法，我们强调了传统方法在处理复杂数据源和应对快节奏数仓开发项目时的缺点。而为了解决这种问题，我们积极地让业务利益相关者参与到需求分析和设计过程。在本章的最后，我们将介绍一套利于跨部门协同的纬度建模的敏捷工具 - BEAM（Business Event Analysis and Modeling），该工具带有**协同**、**增量**和**迭代**的重要特性。
+
+OLTP系统和DW/BI系统首先在目的性上就存在根本性不同。OLTP主要是为了支持业务流程的执行，而DW/BI则是为了评估分析业务流程的执行结果。为了提升执行效率，OLTP系统需要在联机交易处理的应用方向上不断优化。相反，数据仓库则需要在查询处理和易用性的方向进行优化。下表突出了两者在使用模式上的重要区别，并从数据管理系统的角度去描述两者需求的差异。   
+
+| 比较纬度  | OLTP数据库 | 数据仓库 |
+| ------------- | ------------- | -------- |
+| 目的  | Content Cell  | dhsdsjdj |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+| Content Cell  | Content Cell  |  sdhusda |
+
+
+## 案例：ER建模的问题
+ER建模是OLTP系统数据库设计的标准方法。
+该方法将所有的数据类型分成了实体（entity）、关系（relationship）和属性（attribute）三种。
+图1-1展示了实体级ER图的示例。图中实体用方块表示，关系则使用方块间连线来表示。
+每对关系的基数（1对1的关系、1对多的关系和多对多的关系）则是在边的两端用不同的符号表示，如 | 表示1，O 表示0或者可选择，“鱼尾”则表示多个。
+举例，每位房产经纪人在一段时间内只能一个门店入职，则经纪人实体和门店实体之间的关系是1对1；每位房产经纪人在一段时间内可能售出多套二手房源，则经纪人实体和房源实体之间是“1对多”的人关系；
+
+在关系型数据库中，实体对应的是数据库表，属性对应的则是数据库表的列。
+关系则可以使用表示实体的数据库表的列或者额外的数据库表的列来表示。
+比如经纪人和身份信息是1:1的关系，则在经纪人表和身份信息表上可各有一列来存放对方的外链；比如经纪人和维护房源是1:N的关系，则在房源表上有一列存放经纪人的外链；再比如产品和订单之间是M:N的关系，则需要有一张额外的映射表来存放产品外链和订单外链的对应关系。
+
+ER建模常常和范式化有关，尤其是第三范式。ER建模和范式化的技术目标很明确：尽可能降低数据冗余和显式描述数据里的1:1和1:N的关系。而这些要求目前也已经被RDMS系统所强制实现。
+
