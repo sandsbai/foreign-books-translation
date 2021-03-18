@@ -7,20 +7,30 @@ OLTP系统和DW/BI系统首先在目的性上就存在根本性不同。OLTP主�
 
 | 比较纬度  | OLTP数据库 | 数据仓库 |
 | ------------- | ------------- | -------- |
-| 目的  | Content Cell  | dhsdsjdj |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
-| Content Cell  | Content Cell  |  sdhusda |
+| 目的  | 执行独立的业务过程，如下单  | 分析评估多个业务过程，如观察带看量 |
+| 事务类型  | insert、select、update、delete |  select |
+| 事务风格  | 预定义、可预测、面向稳定的应用  |  不可预测、多变、面向多元的分析 |
+| 优化方向  | 更新效率和写一致性  |  查询性能和可用性 |
+| 更新频率  | 实时：需要及时相应业务需求  |  近实时：周期性更新 |
+| 更新并发度  | 高  |  低 |
+| 历史数据访问情况  | 当前和近段时期的数据  |  当前和近几年的数据 |
+| 选择粒度  | 精准和微观实体  |  模糊和宏观群体 |
+| 比较频率  | 低频  |  高频 |
+| 查询条件复杂度  | 低  |  高 |
+| 每事务的Join数量  | 低（1-3）  |  高（10+） |
+| 每事务涉及记录数  | 十来条  |  百万级 |
+| 日均事务数  | 百万级  |  上千条 |
+| 数据量  | GB-TB  |  TB-PB |
+| 数据类型  | 主要是原始明细数据  |  明细数据、汇总数据和衍生数据 |
+
 
 
 ## 案例：ER建模的问题
 ER建模是OLTP系统数据库设计的标准方法。
 该方法将所有的数据类型分成了实体（entity）、关系（relationship）和属性（attribute）三种。
 图1-1展示了实体级ER图的示例。图中实体用方块表示，关系则使用方块间连线来表示。
+![image](https://user-images.githubusercontent.com/20431533/111636369-5d99c400-8833-11eb-969a-18ab8bd780e1.png)
+图1-1
 每对关系的基数（1对1的关系、1对多的关系和多对多的关系）则是在边的两端用不同的符号表示，如 | 表示1，O 表示0或者可选择，“鱼尾”则表示多个。
 举例，每位房产经纪人在一段时间内只能一个门店入职，则经纪人实体和门店实体之间的关系是1对1；每位房产经纪人在一段时间内可能售出多套二手房源，则经纪人实体和房源实体之间是“1对多”的人关系；
 
@@ -28,5 +38,42 @@ ER建模是OLTP系统数据库设计的标准方法。
 关系则可以使用表示实体的数据库表的列或者额外的数据库表的列来表示。
 比如经纪人和身份信息是1:1的关系，则在经纪人表和身份信息表上可各有一列来存放对方的外链；比如经纪人和维护房源是1:N的关系，则在房源表上有一列存放经纪人的外链；再比如产品和订单之间是M:N的关系，则需要有一张额外的映射表来存放产品外链和订单外链的对应关系。
 
-ER建模常常和范式化有关，尤其是第三范式。ER建模和范式化的技术目标很明确：尽可能降低数据冗余和显式描述数据里的1:1和1:N的关系。而这些要求目前也已经被RDMS系统所强制实现。
+ER建模常常和范式化有关，尤其是第三范式。ER建模和范式化的技术目标很明确：尽可能降低数据冗余和显式描述数据里的1:1和1:N的关系。而这些要求目前也已经被RDMS系统所强制实现。  
 
+### ER建模应用于OLTP的优势 
+>第三范式（3NF）对于事务处理是高效的。
+OLTP需要写事务（insert、updates、deletes）非常高效。通过遵循3NF降低数据冗余，事务操作保持了最大限度的小和简单。   
+譬如，通过引用C用户记录和S电信服务记录，就可表示C用户反复使用S电信服务的事务操作，而不需要每次都记录C用户和S电信服务的详细信息。而当C用户或者S服务的信息需要改变时，只需更改对应用户表或者服务表上的一条记录信息即可。假如我们并非通过引用记录而是通过不断复制记录副本的方式来记录事务，则更改信息时极有可能由于副本更改不完全而导致数据库状态的不一致。除了3NF之外，还有其他更高阶的范式，但3NF已能满足大部分ER建模人员的实际需求。对于3NF，关系型模型的发明者Edgar (Ted) Codd有一句非常著名的言论：“The key, the whole key, and nothing but the key, so help 
+me Codd”。
+ 
+### ER建模应用于数据仓库的缺点   
+>3NF在查询处理方面的表现较为低效
+Even though 3NF makes it easier to get data in, it has a huge disadvantage for BI 
+and data warehousing: it makes it harder to get the data out. Normalization proliferates tables and join paths making queries (SQL selects) less efficient and harder 
+to code correctly. For example, looking at the Figure 1-1 ERD, could you estimate 
+how many ways PRODUCT CATEGORY can be joined to ORDER 
+TRANSACTION? A physical 3NF version of the model would contain at least 20 
+more tables to resolve the M:M relationships. Faced with such 3NF databases, even 
+the simplest BI query requires multiple tables to be joined through multiple intermediate tables. These long joins paths are difficult to optimize and queries invariably run slowly.
+虽然3NF有利于数据写入操作，但不利于数据读出操作，这使得3NF在数据仓库和BI应用方面有不可忽视的缺点。范式使得数据库表倾向于拆分成多个不同的实体类别，而JOIN查询多个数据库表的效率较低且易导致编码错误。   
+譬如，回顾图1-1，读者能想象将PRODUCT CATEGORY连接（JOIN）到ORDER的方式有多少种吗？为了
+>3NF模型不容易理解
+More importantly, queries will only produce the right answers if users navigate the 
+right join paths, i.e., ask the right questions in SQL terms. If the wrong joins are 
+used, they unknowingly get answers to some other (potentially meaningless) 
+questions. 3NF models are complex for both people and machines. Specialist 
+hardware (data warehouse appliances) is improving query/join performance all the 
+time, but the human problems are far more difficult to solve. Smart BI software can 
+hide database schema complexity behind a semantic layer, but that merely moves 
+the burden of understanding a 3NF model from BI users at query time to BI 
+developers at configuration time. That’s a good move but its not enough. 3NF 
+models remain too complex for business stakeholders to review and quality assure 
+(QA).
+
+## 案例：纬度建模
+
+### 星型建模
+
+### 事实表和纬度表
+
+### 纬度建模应用于数据仓库的优势
