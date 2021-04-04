@@ -1,6 +1,6 @@
 # 外文书籍翻译
 ---   
-## 《agile-data-warehouse-design》  敏捷数仓设计
+## Book One 《agile-data-warehouse-design》  敏捷数仓设计
 ![image](https://user-images.githubusercontent.com/20431533/113496621-1fd4b500-952e-11eb-910e-064a05c1a67e.png)    
 
 市面上大多和数仓设计相关的书籍，基本都是瀑布流的设计方式。瀑布流带来的最大问题，是其“毕其功于一役”的特点让项目组无法承受失败的结果。   
