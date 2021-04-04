@@ -14,7 +14,7 @@
 ### 第一章  如何进行数据仓库建模 
 ####  *[第一节 OLTP Vs DW/BI 两个不同的世界](https://github.com/linuxProber/agile-data-warehouse-design/blob/main/oltp-vs-olap.md)
 ####  *[第二节 数仓需求分析和设计](https://github.com/sandsbai/agile-data-warehouse-design/blob/main/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93%E5%88%86%E6%9E%90%E5%92%8C%E8%AE%BE%E8%AE%A1.md)
-####  *[第三节 BEAM：业务事件分析和建模方法](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)
-####  *[总结](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)    
+####  *[第三节 BEAM：业务事件分析和建模方法(未完结)](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)   
+####  *[总结（未完结）](https://github.com/linuxProber/agile-data-warehouse-design/tree/main)    
 **由于尊重版权，翻译范围只包括免费样本，想了解更多的同学，可在电商平台上采购该书进行研究**   
 ---  
