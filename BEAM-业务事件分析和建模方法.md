@@ -82,4 +82,4 @@ BEAM短码作为速记符号，不仅可记录一般性数据属性如数据类�
 
 BEAM支持敏捷理念的核心价值观：“**Individuals and interactions over proc- esses and tools.**”, “**Working software over comprehensive documentation.**” 和 “**Customer collaboration over contract negotiation.**”   
 
-BEAM方法鼓励数据仓库实践人员直接和相关人员协作，产出兼容的数据模型而非需求文档，产出可运行的BI报表原型而非模型。如此，BEAM方法得以维护敏捷价值观和敏捷的原则：（**maximizing the amount of work not done**）   
+BEAM方法鼓励数据仓库实践人员直接和相关人员协作，产出兼容的数据模型而非需求文档，产出可运行的BI报表原型而非模型。如此，BEAM方法得以维护敏捷价值观和敏捷的原则：**maximizing the amount of work not done**
